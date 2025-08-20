@@ -6,7 +6,7 @@
   <title>下载</title>
   <style>
     :root {
-      --bg-url: url('https://gitee.com/GxlGemini/mypicture/raw/master/img/2025/8/【哲风壁纸】晴空-治愈-猫.webp'); /* 在这里替换背景图片 */
+      /**--bg-url: url('https://gitee.com/GxlGemini/mypicture/raw/master/img/2025/8/【哲风壁纸】晴空-治愈-猫.webp'); /* 在这里替换背景图片 */
       --bg-color: #f5f7fa;
       --card-bg: rgba(255, 255, 255, 0.82);
       --text-color: #333;
@@ -108,6 +108,130 @@
       color: #555;
       text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
     }
+
+  /**加入新的样式
+    /* ========== 动画效果 ========== */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  header {
+    animation: fadeInDown 0.8s ease;
+  }
+
+  .category {
+    animation: fadeInUp 0.6s ease;
+    animation-fill-mode: both;
+  }
+
+  /* 让不同模块依次出现 */
+  .category:nth-child(1) { animation-delay: 0.2s; }
+  .category:nth-child(2) { animation-delay: 0.4s; }
+  .category:nth-child(3) { animation-delay: 0.6s; }
+  .category:nth-child(4) { animation-delay: 0.8s; }
+  .category:nth-child(5) { animation-delay: 1s; }
+  .category:nth-child(6) { animation-delay: 1.2s; }
+
+  /* 按钮 hover 优化 */
+  a.btn {
+    position: relative;
+    overflow: hidden;
+  }
+
+  a.btn::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: rgba(255,255,255,0.25);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+  }
+
+  a.btn:hover::after {
+    left: 150%;
+  }
+
+  a.btn:hover {
+    transform: translateY(-3px) scale(1.03);
+  }
+
+  /* 图片 hover 轻微放大 */
+  .links img {
+    transition: transform 0.4s ease, box-shadow 0.3s;
+  }
+  .links img:hover {
+    transform: scale(1.5);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  }
+
+  /* 🌈 渐变呼吸光 */
+@keyframes bgGradient {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(30deg);
+  }
+  100% {
+    filter: hue-rotate(0deg);
+  }
+}
+
+/* 🌈 渐变流动波浪 */
+@keyframes bgWave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  /* 背景渐变（多彩） */
+  background: linear-gradient(-45deg,  #89f7fe,
+    #66a6ff,
+    #fbc2eb,
+    #a6c1ee,
+    #ffecd2,
+    #f6d365);
+  background-size: 300% 300%;
+
+  /* 毛玻璃效果 */
+  backdrop-filter: blur(6px);
+
+  /* 同时执行两个动画 */
+  animation: bgWave 15s ease-in-out infinite, 
+             bgGradient 8s ease-in-out infinite;
+}
+
   </style>
 </head>
 <body>
