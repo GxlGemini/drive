@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>驱动与工具下载站</title>
+  <!-- 引入字体图标库 (可选，用于美化按钮) -->
+  <style>
+    :root {
+      /* 核心配色 */
+      --primary-color: #007aff;
+      --primary-hover: #0056b3;
+      --accent-color: #ff2d55;
+      --text-main: #1d1d1f;
+      --text-sub: #86868b;
+      
+      /* 玻璃拟态参数 */
+      --glass-bg: rgba(255, 255, 255, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.5);
+      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+      --card-radius: 16px;
+    }
+
+    /* ========== 全局重置 ========== */
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 40px;
+    }
+
+    /* ========== 动态背景 ========== */
+    .bg-animation {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: linear-gradient(-45deg, #e0c3fc, #8ec5fc, #91eae4, #ffecd2);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+    
+    /* 叠加纹理或噪点可以增加质感（可选） */
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(30px); /* 强模糊让背景更柔和 */
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ========== 布局容器 ========== */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      animation: fadeInDown 0.8s ease;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .alert-box {
+      display: inline-block;
+      background: rgba(255, 59, 48, 0.1);
+      color: #d63031;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1px solid rgba(255, 59, 48, 0.2);
+    }
+
+    /* ========== 卡片通用样式 ========== */
+    .category {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--card-radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--glass-shadow);
+      
+      /* 动画初始状态 */
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    /* 标题样式 */
+    .category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding-bottom: 0.8rem;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .category h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .category h2::before {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 18px;
+      background: var(--primary-color);
+      border-radius: 3px;
+    }
+
+    /* 教程按钮（特殊样式） */
+    .tutorial-btn {
+      font-size: 0.85rem;
+      background: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+    }
+    .tutorial-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0,122,255,0.3);
+    }
+
+    /* ========== 按钮网格系统 ========== */
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    a.btn {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 10px;
+      color: #333;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      min-height: 40px;
+    }
+
+    a.btn:hover {
+      background: #fff;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    /* 针对包含长文本的按钮优化 */
+    .btn-desc {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      font-weight: normal;
+      margin-top: 4px;
+    }
+
+    /* ========== 图片展示优化 (Lightbox) ========== */
+    .image-gallery {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .image-card {
+      width: 45%;
+      max-width: 200px;
+      cursor: zoom-in;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.5);
+      transition: transform 0.3s ease;
+      background: #fff;
+    }
+    
+    .image-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .image-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* 遮罩层（点击放大的效果） */
+    #lightbox {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+      cursor: zoom-out;
+    }
+
+    #lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    #lightbox.active img {
+      transform: scale(1);
+    }
+
+    /* ========== 底部 ========== */
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-top: 2rem;
+    }
+    
+    footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* ========== 动画关键帧 ========== */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 交错动画延迟 */
+    .category:nth-child(1) { animation-delay: 0.1s; }
+    .category:nth-child(2) { animation-delay: 0.2s; }
+    .category:nth-child(3) { animation-delay: 0.3s; }
+    .category:nth-child(4) { animation-delay: 0.4s; }
+    .category:nth-child(5) { animation-delay: 0.5s; }
+    .category:nth-child(6) { animation-delay: 0.6s; }
+
+    /* 移动端微调 */
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.8rem; }
+      .links { grid-template-columns: 1fr 1fr; } /* 手机上两列 */
+      .image-card { width: 100%; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 背景 -->
+<div class="bg-animation"></div>
+<div class="bg-overlay"></div>
+
+<header>
+  <h1>📂 驱动与工具下载</h1>
+  <div class="alert-box">
+    ⚠️ 备用外部链接 · 请仔细阅读文档 · 驱动为Beta版本
+  </div>
+</header>
+
+<main>
+  
+  <!-- 常用链接 -->
+  <section class="category">
+    <div class="category-header">
+      <h2>🔗 常用链接</h2>
+    </div>
+    <div class="links">
+      <a class="btn" href="https://1drv.ms/f/c/a86ae627718cecfe/Eh9Wr7a4Na9Dnj_Fa9N2GdYBZOmqNCj40Opc7vqQVoftBw?e=ZRbv9Q" target="_blank">💠 OneDrive 云盘</a>
+      <a class="btn" href="http://www.dmlife.cn/" target="_blank">🏠 DM官网首页</a>
+      <a class="btn" href="http://www.dmlife.cn/zhichi/" target="_blank">🔙 官网下载页</a>
+      <a class="btn" href="https://wj.qq.com/s2/13831423/65b4/" target="_blank">📣 提交建议</a>
+    </div>
+  </section>
+
+  <!-- 网卡驱动 -->
+  <section class="category">
+    <div class="category-header">
+      <h2>🌐 网卡驱动</h2>
+    </div>
+    <div class="links">
+      <a class="btn" href="https://wwtw.lanzouq.com/iCDeL338yala" download>AD081S 驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/igRTs338yfaj" download>AD081 驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/ibFJA338ygxi" download>AD082 驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iKiR2338yiuh" download>AD083 驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/io5Ay338yoad" download>AD085 驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iknaq35gyt6j" download>AD086 驱动</a>
+      <a class="btn" href="https://f005.backblazeb2.com/file/img-gxl/%E7%BD%91%E5%8D%A1%E9%A9%B1%E5%8A%A8/AD087-600M%E8%93%9D%E7%89%99%2Bwifi.zip" download>
+        AD087 驱动
+        <span class="btn-desc">600M 蓝牙+WiFi</span>
+      </a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iH25f338yrxe" download>CHB011/018 驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iBxKL338ysgd" download>RTL8153 网卡驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/i4WzL338yqje" download>
+        Win7 数字签名补丁
+        <span class="btn-desc">SHA256 / SP1</span>
+      </a>
+      <a class="btn" href="https://wwtw.lanzouq.com/i1Gcc3avi44b" download>
+        Linux 驱动
+        <span class="btn-desc">AD082 & AD086</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 蓝牙驱动 -->
+  <section class="category">
+    <div class="category-header">
+      <h2>📶 蓝牙驱动</h2>
+    </div>
+    <div class="links">
+      <a class="btn" href="https://f005.backblazeb2.com/file/img-gxl/%E8%93%9D%E7%89%99%E9%80%82%E9%85%8D%E5%99%A8/AD030.zip" download>
+        AD030
+        <span class="btn-desc">BT5.0 / Win7</span>
+      </a>
+      <a class="btn" href="https://wwtw.lanzouq.com/i6HrR338y2de" download>
+        AD050
+        <span class="btn-desc">BT5.1 / Win7</span>
+      </a>
+      <a class="btn" href="https://wwtw.lanzouq.com/ibH8t338y2sj" download>
+        AD088
+        <span class="btn-desc">BT5.3 / Win7</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 实用工具 -->
+  <section class="category">
+    <div class="category-header">
+      <h2>🧰 实用工具</h2>
+    </div>
+    <div class="links">
+      <a class="btn" href="https://wwtw.lanzouq.com/inV9t338y7ub" download>DiskGenius Pro</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/idMji338y72d" download>R-Studio 数据恢复</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/ijW9x338y8pc" download>FAT32 格式化工具</a>
+    </div>
+  </section>
+
+  <!-- 硬盘盒固件 -->
+  <section class="category">
+    <div class="category-header">
+      <h2>🛠️ 硬盘盒固件</h2>
+    </div>
+    <div class="links">
+      <a class="btn" href="https://wwtw.lanzouq.com/i4Nmw338yw8j" download>HD010 & 036 (RTL9201R)</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iUmNs338ywzg" download>HD1300 (RTL9210B)</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iUSyH338yxmj" download>HD2000 (RTL9220)</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iwNe7338yy1e" download>JMS580 固件</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/i5XNJ35xg49g" download>HD035 (JMS578)</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/i1jBG356s5ha" download>RTL9210 & 9210B</a>
+    </div>
+  </section>
+
+  <!-- APD006 苹果U盘 (重构版) -->
+  <section class="category">
+    <div class="category-header">
+      <h2>🍎 APD006 苹果U盘</h2>
+      <!-- 独立的教程按钮，不再混在标题里 -->
+      <a href="https://s21.ax1x.com/2025/11/12/pZC33jI.webp" class="tutorial-btn" target="_blank">
+        📖 查看详细图文教程
+      </a>
+    </div>
+    
+    <!-- 软件下载 -->
+    <div class="links" style="margin-bottom: 20px;">
+      <a class="btn" href="https://apps.apple.com/us/app/i-flashdevice-hd/id1098089751" target="_blank" style="grid-column: 1 / -1; background: rgba(255,255,255,0.6);">
+        💾 i-flashdevice hd (App Store)
+        <span class="btn-desc" style="color: #ff3b30; margin-top: 5px;">
+          注：iPhone 15/16/17 系列无需下载 APP，直接使用系统“文件”管理
+        </span>
+      </a>
+    </div>
+
+    <!-- 图片预览区域 (点击可放大) -->
+    <div class="image-gallery">
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="https://gitee.com/GxlGemini/mypicture/raw/master/img/2025/8/APD006.webp" alt="APP图标示意图">
+      </div>
+      <div class="image-card" onclick="openLightbox(this)">
+        <img src="https://gitee.com/GxlGemini/mypicture/raw/master/img/2025/8/fileapp.webp" alt="文件APP示意图">
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <b>⚓© 2025 <a href="https://gxlgemini.github.io/">Theo</a>. All rights reserved</b>
+</footer>
+
+<!-- Lightbox 容器 -->
+<div id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Full Screen Image">
+</div>
+
+<!-- 脚本逻辑 -->
+<script>
+  // 打开图片查看器
+  function openLightbox(element) {
+    const imgSrc = element.querySelector('img').src;
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    
+    lightboxImg.src = imgSrc;
+    lightbox.classList.add('active');
+    
+    // 禁止背景滚动
+    document.body.style.overflow = 'hidden';
+  }
+
+  // 关闭图片查看器
+  function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    lightbox.classList.remove('active');
+    
+    // 恢复滚动
+    document.body.style.overflow = 'auto';
+  }
+
+  // 百度统计
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?7ee61cedc7a19bc2f8146840a87355ca";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+</body>
+</html>
