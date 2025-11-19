@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>下载</title>
+  <style>
+    :root {
+      /**--bg-url: url('https://gitee.com/GxlGemini/mypicture/raw/master/img/2025/8/【哲风壁纸】晴空-治愈-猫.webp'); /* 在这里替换背景图片 */
+      --bg-color: #f5f7fa;
+      --card-bg: rgba(255, 255, 255, 0.82);
+      --text-color: #333;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: var(--text-color);
+      background: var(--bg-color) no-repeat center/cover;
+      background-image: var(--bg-url);
+    }
+
+    /* 背景加一层半透明遮罩，提升文字可读性 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(6px);
+      z-index: -1;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #111;
+      text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    header p {
+      margin: 0.5rem 0 0;
+      color: #444;
+      font-size: 1rem;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .category {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+
+    .category h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.6rem;
+      color: #111;
+    }
+
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.8rem;
+      margin-top: 0.8rem;
+    }
+
+    a.btn {
+      position: relative;
+      z-index: 1;
+      display: block;
+      text-align: center;
+      padding: 0.7rem 0.8rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #333;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      word-break: break-word;
+      overflow: hidden;
+    }
+
+    a.btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -50%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: skewX(-45deg);
+      transition: left 0.5s ease;
+      z-index: -1;
+    }
+
+    a.btn:hover::before {
+      left: 150%;
+    }
+
+    a.btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem 0;
+      font-size: 0.85rem;
+      color: #555;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    }
+
+  /**加入新的样式
+    /* ========== 动画效果 ========== */
+  /* @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  header {
+    animation: fadeInDown 0.8s ease;
+  }
+
+  .category {
+    animation: fadeInUp 0.6s ease;
+    animation-fill-mode: both;
+  }
+
+  /* 让不同模块依次出现  
+  .category:nth-child(1) { animation-delay: 0.2s; }
+  .category:nth-child(2) { animation-delay: 0.4s; }
+  .category:nth-child(3) { animation-delay: 0.6s; }
+  .category:nth-child(4) { animation-delay: 0.8s; }
+  .category:nth-child(5) { animation-delay: 1s; }
+  .category:nth-child(6) { animation-delay: 1.2s; } */
+
+  /* 按钮 hover 优化 */
+  a.btn {
+    position: relative;
+    overflow: hidden;
+  }
+
+  a.btn::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: rgba(255,255,255,0.25);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+  }
+
+  a.btn:hover::after {
+    left: 150%;
+  }
+
+  a.btn:hover {
+    transform: translateY(-3px) scale(1.03);
+  }
+
+  /* 图片 hover 轻微放大 */
+  .links img {
+    transition: transform 0.4s ease, box-shadow 0.3s;
+  }
+  .links img:hover {
+    transform: scale(1.8);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    position: relative;
+    z-index: 10;
+  }
+
+  /* 🌈 渐变呼吸光 */
+@keyframes bgGradient {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(30deg);
+  }
+  100% {
+    filter: hue-rotate(0deg);
+  }
+}
+
+/* 🌈 渐变流动波浪 */
+@keyframes bgWave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  /* 背景渐变（多彩） */
+  background: linear-gradient(-45deg,  #89f7fe,
+    #66a6ff,
+    #fbc2eb,
+    #a6c1ee,
+    #ffecd2,
+    #f6d365);
+  background-size: 300% 300%;
+
+  /* 毛玻璃效果 */
+  backdrop-filter: blur(6px);
+
+  /* 同时执行两个动画 */
+  animation: bgWave 15s ease-in-out infinite, 
+             bgGradient 8s ease-in-out infinite;
+
+
+             button {
+    font-weight: bold;
+}
+}
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>🧩备用下载地址</h2>
+  <p><b>✨本地址属于备用下载-外部链接，驱动部分是最新Beta，安装请仔细查看文档！</b></p>
+</header>
+
+<main>
+  <!-- 在这里放你之前的分类和按钮 HTML -->
+   <section class="category">
+    <!-- <h2>🔗 常用链接</h2> -->
+    <div class="links">
+      <a class="btn" href="https://1drv.ms/f/c/a86ae627718cecfe/Eh9Wr7a4Na9Dnj_Fa9N2GdYBZOmqNCj40Opc7vqQVoftBw?e=ZRbv9Q" target="_blank">💠 OneDrive 云盘</a>
+      <a class="btn" href="http://www.dmlife.cn/" target="_blank">🏠 DM官网首页</a>
+      <a class="btn" href="http://www.dmlife.cn/zhichi/" target="_blank">🔙 返回官网下载页</a>
+      <a class="btn" href="https://wj.qq.com/s2/13831423/65b4/" target="_blank">📣 提交建议</a>
+    </div>
+  </section>
+
+  <section class="category">
+    <h2>🌐 网卡驱动</h2>
+    <div class="links">
+      <a class="btn" href="https://wwtw.lanzouq.com/iCDeL338yala" download>AD081S网卡驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/igRTs338yfaj" download>AD081网卡驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/ibFJA338ygxi" download>AD082网卡驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iKiR2338yiuh" download>AD083网卡驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/io5Ay338yoad" download>AD085网卡驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iknaq35gyt6j" download>AD086网卡驱动</a>
+      <a class="btn" href="https://f005.backblazeb2.com/file/img-gxl/%E7%BD%91%E5%8D%A1%E9%A9%B1%E5%8A%A8/AD087-600M%E8%93%9D%E7%89%99%2Bwifi.zip" download>AD087网卡驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/i4WzL338yqje" download>windows 7数字签名 SP1 SHA256补丁</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iH25f338yrxe" download>CHB011&018网卡驱动程序</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iBxKL338ysgd" download>Realtek-RTL8153 网卡驱动</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/i1Gcc3avi44b" download>AD082&AD086无线网卡-Linux驱动</a>
+    </div>
+  </section>
+
+  <section class="category">
+    <h2>📶 蓝牙驱动</h2>
+    <div class="links">
+      <a class="btn" href="https://f005.backblazeb2.com/file/img-gxl/%E8%93%9D%E7%89%99%E9%80%82%E9%85%8D%E5%99%A8/AD030.zip" download>AD030_BT5.0_WIN7_Dirver</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/i6HrR338y2de" download>AD050_BT5.1_WIN7_Dirver</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/ibH8t338y2sj" download>AD088_BT5.3_WIN7_Dirver</a>
+    </div>
+  </section>
+
+  <section class="category">
+    <h2>🧰 数据恢复&FAT32格式化工具</h2>
+    <div class="links">
+      <a class="btn" href="https://wwtw.lanzouq.com/inV9t338y7ub" download>DiskGenius_Pro数据恢复</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/idMji338y72d" download>R-Studio-数据恢复</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/ijW9x338y8pc" download>FormatTool-FAT32格式化工具</a>
+    </div>
+  </section>
+
+  <section class="category">
+    <h2>🛠️ 硬盘盒固件</h2>
+    <div class="links">
+      <a class="btn" href="https://wwtw.lanzouq.com/i4Nmw338yw8j" download>HD010&036固件程序</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iUmNs338ywzg" download>HD1300固件程序-RTL9210B</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iUSyH338yxmj" download>HD2000-RTL9220固件</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/iwNe7338yy1e" download>JMS580固件程序</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/i5XNJ35xg49g" download>HD035-JMS578</a>
+      <a class="btn" href="https://wwtw.lanzouq.com/i1jBG356s5ha" download>RTL9210&9210B固件程序</a>
+    </div>
+  </section>
+
+  <section class="category">
+  <h2 style="display:inline-block; margin-right:10px;">🍎 APD006苹果U盘</h2>  
+   <a href="https://s21.ax1x.com/2025/11/12/pZC33jI.webp" style="display:inline-block; padding:8px 16px; background:#007BFF; color:white; text-decoration:none; border-radius:6px; font-weight:bold; font-family:'Segoe UI',sans-serif; transition:all 0.3s;" onmouseover="this.style.background='#0056b3';" onmouseout="this.style.background='#007BFF';"> 👉 点击我查看 · 详细图文教程 </a>
+    <a class="btn" href="https://apps.apple.com/us/app/i-flashdevice-hd/id1098089751" download>i-flashdevice hd软件链接🔗(苹果手机点击即可跳转)</br>
+      PS： iPhone15 16 17系列不需要该APP，通过系统自带文件APP📁双击浏览打开可显示磁盘！！！
+    </a>
+    <div class="links">
+      <img src="https://gitee.com/GxlGemini/mypicture/raw/master/img/2025/8/APD006.webp" alt="APD006苹果U盘APP" style="display: block; margin: 0 auto; max-width: 100%; border-radius: 8px;">
+      <img src="https://gitee.com/GxlGemini/mypicture/raw/master/img/2025/8/fileapp.webp" alt="文件app" style="display: block; margin: 0 auto; max-width: 80%; border-radius: 8px;">
+    </div>
+    
+
+  </section>
+</main>
+
+<footer>
+  <b>⚓© 2025 <a href="https://gxlgemini.github.io/" target="_blank" style="color: rgb(207, 30, 243); text-decoration: none;">Theo</a>. All rights reserved</b>
+</footer>
+
+<!-- 百度统计 -->
+ 
+<script type="text/javascript">
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?7ee61cedc7a19bc2f8146840a87355ca";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+</body>
+</html>
